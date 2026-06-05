@@ -21,10 +21,6 @@
 
         body{
             background-color: var(--light);
-            color: var(--text);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
         }
 
         .navbar{
@@ -33,144 +29,100 @@
 
         .navbar-brand,
         .nav-link{
-            color: var(--white) !important;
+            color: white !important;
         }
 
         .nav-link:hover{
             color: var(--accent) !important;
         }
-
-        .btn-primary-custom{
-            background-color: var(--accent);
-            border: none;
-            color: white;
-        }
-
-        .btn-primary-custom:hover{
-            background-color: var(--accent-hover);
-        }
-
-        main{
-            flex: 1;
-        }
-
-        footer{
-            background-color: var(--primary);
-            color: white;
-            text-align: center;
-            padding: 15px;
-            margin-top: 40px;
-        }
     </style>
-
 </head>
 <body>
 
-    <!-- NAVBAR -->
-    <nav class="navbar navbar-expand-lg navbar-dark">
-        <div class="container">
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
 
-            <a class="navbar-brand d-flex align-items-center" href="/">
-    
-    <img src="{{ asset('img/logo.png') }}"
-         alt="AutoRent SV"
-         width="50"
-         height="50"
-         class="me-2">
+        <a class="navbar-brand fw-bold"
+           href="{{ route('home') }}">
+            AutoRent SV
+        </a>
 
-    <span class="fw-bold">
-        AutoRent SV
-    </span>
+        <button class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNav">
 
-</a>
+            <span class="navbar-toggler-icon"></span>
 
-            <button class="navbar-toggler"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#navbarNav">
+        </button>
 
-                <span class="navbar-toggler-icon"></span>
+        <div class="collapse navbar-collapse"
+             id="navbarNav">
 
-            </button>
+            <ul class="navbar-nav ms-auto">
 
-            <div class="collapse navbar-collapse" id="navbarNav">
+                <li class="nav-item">
+                    <a class="nav-link"
+                       href="{{ route('catalogo.index') }}">
+                        Catálogo
+                    </a>
+                </li>
 
-                <ul class="navbar-nav ms-auto">
+                @auth
 
                     <li class="nav-item">
-                        <a class="nav-link" href="/">
-                            Inicio
+                        <a class="nav-link"
+                           href="{{ route('dashboard') }}">
+                            Dashboard
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('catalogo.index') }}">
-                            Catálogo
+
+                        <form action="{{ route('logout') }}"
+                              method="POST">
+
+                            @csrf
+
+                            <button type="submit"
+                                    class="btn btn-link nav-link text-decoration-none">
+                                Cerrar Sesión
+                            </button>
+
+                        </form>
+
+                    </li>
+
+                @else
+
+                    <li class="nav-item">
+                        <a class="nav-link"
+                           href="{{ route('login') }}">
+                            Iniciar Sesión
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            Login
+                        <a class="nav-link"
+                           href="{{ route('register') }}">
+                            Registrarse
                         </a>
                     </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            Registro
-                        </a>
-                    </li>
+                @endauth
 
-                </ul>
-
-            </div>
-
-        </div>
-    </nav>
-
-    <!-- CONTENIDO -->
-    <main>
-
-        <div class="container mt-4">
-
-            @if(session('success'))
-
-                <div class="alert alert-success">
-                    {{ session('success') }}
-                </div>
-
-            @endif
-
-            @if($errors->any())
-
-                <div class="alert alert-danger">
-
-                    <ul class="mb-0">
-
-                        @foreach($errors->all() as $error)
-
-                            <li>{{ $error }}</li>
-
-                        @endforeach
-
-                    </ul>
-
-                </div>
-
-            @endif
+            </ul>
 
         </div>
 
-        @yield('content')
+    </div>
+</nav>
 
-    </main>
+<main>
+    @yield('content')
+</main>
 
-    <!-- FOOTER -->
-    <footer>
-        © {{ date('Y') }} AutoRent SV - Sistema de Alquiler de Vehículos
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

@@ -5,95 +5,81 @@ use App\Http\Controllers\VehiculoController;
 use App\Http\Controllers\ReservaController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ReporteController;
-use App\Http\Controllers\UsuarioController;
+use App\Http\Controllers\ProfileController;
 
-//Ruta publica
-Route::get('/', [HomeController::class, 'index'])
-    ->name('home');
+//Rutas públicas
+Route::get('/', function () {
+    return view('home.index');
+})->name('home');
 
-//Login y Registro
-Route::get('/login', [UsuarioController::class, 'login'])
-    ->name('login');
-
-Route::post('/login', [UsuarioController::class, 'autenticar'])
-    ->name('login.autenticar');
-
-Route::get('/register', [UsuarioController::class, 'register'])
-    ->name('register');
-
-Route::post('/register', [UsuarioController::class, 'store'])
-    ->name('register.store');
-
-Route::post('/logout', [UsuarioController::class, 'logout'])
-    ->name('logout');
-
-//Catalogo de vehiculos
+//Cátalogo público
 Route::get('/catalogo', [VehiculoController::class, 'catalogo'])
     ->name('catalogo.index');
 
 Route::get('/catalogo/{vehiculo}', [VehiculoController::class, 'show'])
     ->name('catalogo.show');
 
-//Perfil de cliente
-Route::get('/perfil', [UsuarioController::class, 'perfil'])
-    ->name('perfil');
+//Dashboard
+Route::get('/dashboard', function () {
 
-Route::put('/perfil', [UsuarioController::class, 'actualizarPerfil'])
-    ->name('perfil.update');
+    if(auth()->user()->is_admin){
 
-//Reservas de cliente
-Route::get('/mis-reservas', [ReservaController::class, 'misReservas'])
-    ->name('reservas.mis');
+        return view('admin.dashboard');
+    }
 
-Route::get('/reservar/{vehiculo}', [ReservaController::class, 'create'])
-    ->name('reservas.create');
+    return view('cliente.dashboard');
 
-Route::post('/reservar', [ReservaController::class, 'store'])
-    ->name('reservas.store');
+})->middleware(['auth'])->name('dashboard');
 
-//Dashboard de administrador
-Route::get('/dashboard', [HomeController::class, 'dashboard'])
-    ->name('dashboard');
+//Perfil de Breeze
+Route::middleware('auth')->group(function () {
 
-//Gestión de vehículos
-Route::get('/vehiculos', [VehiculoController::class, 'index'])
-    ->name('vehiculos.index');
+    Route::get('/profile', [ProfileController::class, 'edit'])
+        ->name('profile.edit');
 
-Route::get('/vehiculos/create', [VehiculoController::class, 'create'])
-    ->name('vehiculos.create');
+    Route::patch('/profile', [ProfileController::class, 'update'])
+        ->name('profile.update');
 
-Route::post('/vehiculos', [VehiculoController::class, 'store'])
-    ->name('vehiculos.store');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])
+        ->name('profile.destroy');
 
-Route::get('/vehiculos/{vehiculo}/edit', [VehiculoController::class, 'edit'])
-    ->name('vehiculos.edit');
+    //Reservas de clientes
+    Route::get('/mis-reservas', [ReservaController::class, 'misReservas'])
+        ->name('reservas.mis');
 
-Route::put('/vehiculos/{vehiculo}', [VehiculoController::class, 'update'])
-    ->name('vehiculos.update');
+    Route::get('/reservar/{vehiculo}', [ReservaController::class, 'create'])
+        ->name('reservas.create');
 
-Route::delete('/vehiculos/{vehiculo}', [VehiculoController::class, 'destroy'])
-    ->name('vehiculos.destroy');
+    Route::post('/reservar', [ReservaController::class, 'store'])
+        ->name('reservas.store');
 
-//Gestión de clientes
-Route::get('/clientes', [UsuarioController::class, 'index'])
-    ->name('clientes.index');
+    //Vehículos de admin
 
-//Gestión de reservas de Admin
-Route::get('/admin/reservas', [ReservaController::class, 'index'])
-    ->name('admin.reservas.index');
+    Route::resource('vehiculos', VehiculoController::class);
 
-Route::put('/admin/reservas/{reserva}', [ReservaController::class, 'update'])
-    ->name('admin.reservas.update');
+    //Clientes
+    Route::get('/clientes', [HomeController::class, 'clientes'])
+        ->name('clientes.index');
 
-//Reportes PDF
-Route::get('/reportes', [ReporteController::class, 'index'])
-    ->name('reportes.index');
+    //Reservas de admin
+    Route::get('/admin/reservas', [ReservaController::class, 'index'])
+        ->name('admin.reservas.index');
 
-Route::get('/reportes/vehiculos', [ReporteController::class, 'vehiculosPdf'])
-    ->name('reportes.vehiculos');
+    Route::put('/admin/reservas/{reserva}', [ReservaController::class, 'update'])
+        ->name('admin.reservas.update');
 
-Route::get('/reportes/clientes', [ReporteController::class, 'clientesPdf'])
-    ->name('reportes.clientes');
+    //Reportes
+    Route::get('/reportes', [ReporteController::class, 'index'])
+        ->name('reportes.index');
 
-Route::get('/reportes/reservas', [ReporteController::class, 'reservasPdf'])
-    ->name('reportes.reservas');
+    Route::get('/reportes/vehiculos', [ReporteController::class, 'vehiculosPdf'])
+        ->name('reportes.vehiculos');
+
+    Route::get('/reportes/clientes', [ReporteController::class, 'clientesPdf'])
+        ->name('reportes.clientes');
+
+    Route::get('/reportes/reservas', [ReporteController::class, 'reservasPdf'])
+        ->name('reportes.reservas');
+});
+
+require __DIR__ . '/auth.php';
