@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Reserva;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ReservaController extends Controller
 {
@@ -25,6 +26,16 @@ class ReservaController extends Controller
     public function create()
     {
         //
+    }
+
+    public function misReservas()
+    {
+        $reservas = Reserva::with('vehiculo')
+            ->where('user_id', Auth::id())
+            ->latest()
+            ->get();
+
+        return view('cliente.reservas', compact('reservas'));
     }
 
     /**

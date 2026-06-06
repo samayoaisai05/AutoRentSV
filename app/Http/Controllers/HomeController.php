@@ -31,7 +31,7 @@ class HomeController extends Controller
         $misReservas = Reserva::where('user_id', $usuario->id)->count();
 
         $reservasActivas = Reserva::where('user_id', $usuario->id)
-            ->where('estado', 'Confirmada')
+            ->where('estado', 'Aprobada')
             ->count();
 
         $reservasFinalizadas = Reserva::where('user_id', $usuario->id)
@@ -41,11 +41,19 @@ class HomeController extends Controller
         $totalGastado = Reserva::where('user_id', $usuario->id)
             ->sum('total');
 
+        $reservasRecientes = Reserva::with('vehiculo')
+            ->where('user_id', $usuario->id)
+            ->latest()
+            ->take(5)
+            ->get();
+
         return view('cliente.dashboard', compact(
+            'usuario',
             'misReservas',
             'reservasActivas',
             'reservasFinalizadas',
-            'totalGastado'
+            'totalGastado',
+            'reservasRecientes'
         ));
     }
 }
