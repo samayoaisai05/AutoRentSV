@@ -74,11 +74,17 @@
 
     @else
 
-        <a href="{{ route('reservas.create', $vehiculo->id) }}"
-           class="btn btn-lg"
-           style="background:#F97316;color:white;">
-            Reservar Vehículo
-        </a>
+        @if($vehiculo->estado === 'Disponible')
+            <a href="{{ route('reservas.create', $vehiculo->id) }}"
+               class="btn btn-lg"
+               style="background:#F97316;color:white;">
+                Reservar Vehículo
+            </a>
+        @else
+            <button class="btn btn-secondary btn-lg" disabled>
+                No disponible
+            </button>
+        @endif
 
     @endif
 

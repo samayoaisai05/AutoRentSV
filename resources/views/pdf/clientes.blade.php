@@ -60,7 +60,7 @@ td{
             <th>Nombre</th>
             <th>Correo</th>
             <th>Teléfono</th>
-            <th>Rol</th>
+            <th>Dirección</th>
         </tr>
     </thead>
 
@@ -71,8 +71,8 @@ td{
             <td>{{ $cliente->id }}</td>
             <td>{{ $cliente->name }} {{ $cliente->apellido }}</td>
             <td>{{ $cliente->email }}</td>
-            <td>{{ $cliente->telefono }}</td>
-            <td>{{ $cliente->role }}</td>
+            <td>{{ $cliente->telefono ?? '—' }}</td>
+            <td>{{ $cliente->direccion ?? '—' }}</td>
         </tr>
         @endforeach
 

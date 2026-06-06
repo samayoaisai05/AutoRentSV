@@ -56,6 +56,12 @@
 
 <div class="container">
 
+    @if(session('success'))
+        <div class="alert alert-success shadow-sm mb-3">
+            {{ session('success') }}
+        </div>
+    @endif
+
     <div class="card-table">
 
         <div class="table-responsive">
@@ -105,7 +111,7 @@
                         </td>
 
                         <td>
-                            ${{ number_format($reserva->monto_total,2) }}
+                            ${{ number_format($reserva->total,2) }}
                         </td>
 
                         <td>
@@ -115,9 +121,9 @@
                                     Pendiente
                                 </span>
 
-                            @elseif($reserva->estado == 'Confirmada')
+                            @elseif($reserva->estado == 'Aprobada')
                                 <span class="badge badge-confirmada">
-                                    Confirmada
+                                    Aprobada
                                 </span>
 
                             @elseif($reserva->estado == 'Cancelada')
@@ -151,9 +157,9 @@
                                             Pendiente
                                         </option>
 
-                                        <option value="Confirmada"
-                                            {{ $reserva->estado=='Confirmada' ? 'selected' : '' }}>
-                                            Confirmada
+                                        <option value="Aprobada"
+                                            {{ $reserva->estado=='Aprobada' ? 'selected' : '' }}>
+                                            Aprobada
                                         </option>
 
                                         <option value="Cancelada"
