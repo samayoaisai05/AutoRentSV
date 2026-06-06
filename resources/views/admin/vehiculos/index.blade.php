@@ -31,8 +31,11 @@
 
             <tr>
                 <th>ID</th>
+                <th>Imagen</th>
                 <th>Marca</th>
                 <th>Modelo</th>
+                <th>Placa</th>
+                <th>Precio/Día</th>
                 <th>Año</th>
                 <th>Estado</th>
                 <th>Acciones</th>
@@ -47,8 +50,17 @@
             <tr>
 
                 <td>{{ $vehiculo->id }}</td>
+                <td>
+                    @if($vehiculo->imagen)
+                        <img src="{{ asset('storage/vehiculos/' . $vehiculo->imagen) }}" alt="{{ $vehiculo->marca }} {{ $vehiculo->modelo }}" class="img-thumbnail" style="width: 70px; height: 50px; object-fit: cover;">
+                    @else
+                        <span class="text-muted">Sin imagen</span>
+                    @endif
+                </td>
                 <td>{{ $vehiculo->marca }}</td>
                 <td>{{ $vehiculo->modelo }}</td>
+                <td>{{ $vehiculo->placa ?? '—' }}</td>
+                <td>$ {{ number_format($vehiculo->precio_dia, 2) }}</td>
                 <td>{{ $vehiculo->anio }}</td>
                 <td>{{ $vehiculo->estado }}</td>
 

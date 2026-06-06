@@ -56,6 +56,12 @@
 
 <div class="container">
 
+    @if(session('success'))
+        <div class="alert alert-success shadow-sm mb-3">
+            {{ session('success') }}
+        </div>
+    @endif
+
     <div class="card-table">
 
         <div class="table-responsive">
