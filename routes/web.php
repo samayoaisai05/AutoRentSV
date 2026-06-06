@@ -6,6 +6,7 @@ use App\Http\Controllers\ReservaController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ReporteController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UsuarioController;
 
 //Rutas públicas
 Route::get('/', function () {
@@ -20,16 +21,10 @@ Route::get('/catalogo/{vehiculo}', [VehiculoController::class, 'show'])
     ->name('catalogo.show');
 
 //Dashboard
-Route::get('/dashboard', function () {
 
-    if(auth()->user()->is_admin){
-
-        return view('admin.dashboard');
-    }
-
-    return view('cliente.dashboard');
-
-})->middleware(['auth'])->name('dashboard');
+Route::get('/dashboard', [HomeController::class, 'dashboard'])
+    ->middleware(['auth'])
+    ->name('dashboard');
 
 //Perfil de Breeze
 Route::middleware('auth')->group(function () {
@@ -58,12 +53,14 @@ Route::middleware('auth')->group(function () {
     Route::resource('vehiculos', VehiculoController::class);
 
     //Clientes
-    Route::get('/clientes', [HomeController::class, 'clientes'])
-        ->name('clientes.index');
+    Route::get('/clientes', [UsuarioController::class, 'index'])
+    ->name('clientes.index');
 
     //Reservas de admin
+
     Route::get('/admin/reservas', [ReservaController::class, 'index'])
-        ->name('admin.reservas.index');
+    ->name('admin.reservas.index');
+
 
     Route::put('/admin/reservas/{reserva}', [ReservaController::class, 'update'])
         ->name('admin.reservas.update');

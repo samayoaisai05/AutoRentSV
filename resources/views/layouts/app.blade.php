@@ -21,6 +21,9 @@
 
         body{
             background-color: var(--light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
         .navbar{
@@ -29,11 +32,22 @@
 
         .navbar-brand,
         .nav-link{
-            color: white !important;
+            color: var(--white) !important;
         }
 
         .nav-link:hover{
             color: var(--accent) !important;
+        }
+
+        .user-name{
+            color: #cbd5e1 !important;
+        }
+
+        footer{
+            background-color: var(--primary);
+            color: white;
+            margin-top: auto;
+            padding: 15px 0;
         }
     </style>
 </head>
@@ -44,7 +58,7 @@
 
         <a class="navbar-brand fw-bold"
            href="{{ route('home') }}">
-            AutoRent SV
+            🚗 AutoRent SV
         </a>
 
         <button class="navbar-toggler"
@@ -61,6 +75,7 @@
 
             <ul class="navbar-nav ms-auto">
 
+                {{-- Catálogo visible para todos --}}
                 <li class="nav-item">
                     <a class="nav-link"
                        href="{{ route('catalogo.index') }}">
@@ -70,6 +85,7 @@
 
                 @auth
 
+                    {{-- Dashboard --}}
                     <li class="nav-item">
                         <a class="nav-link"
                            href="{{ route('dashboard') }}">
@@ -77,6 +93,57 @@
                         </a>
                     </li>
 
+                    {{-- Menú del administrador --}}
+                    @if(Auth::user()->is_admin)
+
+                        <li class="nav-item">
+                            <a class="nav-link"
+                               href="{{ route('vehiculos.index') }}">
+                                Vehículos
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link"
+                               href="{{ route('clientes.index') }}">
+                                Clientes
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link"
+                               href="{{ route('admin.reservas.index') }}">
+                                Reservas
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link"
+                               href="{{ route('reportes.index') }}">
+                                Reportes
+                            </a>
+                        </li>
+
+                    @else
+
+                        {{-- Menú del cliente --}}
+                        <li class="nav-item">
+                            <a class="nav-link"
+                               href="{{ route('reservas.mis') }}">
+                                Mis Reservas
+                            </a>
+                        </li>
+
+                    @endif
+
+                    {{-- Nombre del usuario --}}
+                    <li class="nav-item">
+                        <span class="nav-link user-name">
+                            {{ Auth::user()->name }}
+                        </span>
+                    </li>
+
+                    {{-- Cerrar sesión --}}
                     <li class="nav-item">
 
                         <form action="{{ route('logout') }}"
@@ -95,6 +162,7 @@
 
                 @else
 
+                    {{-- Invitados --}}
                     <li class="nav-item">
                         <a class="nav-link"
                            href="{{ route('login') }}">
@@ -121,6 +189,10 @@
 <main>
     @yield('content')
 </main>
+
+<footer class="text-center">
+    © {{ date('Y') }} AutoRent SV | Sistema de Alquiler de Vehículos
+</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 

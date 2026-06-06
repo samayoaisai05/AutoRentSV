@@ -12,7 +12,11 @@ class ReservaController extends Controller
      */
     public function index()
     {
-        //
+        $reservas = Reserva::with(['user', 'vehiculo'])
+            ->latest()
+            ->get();
+
+        return view('admin.reservas.index', compact('reservas'));
     }
 
     /**
@@ -52,7 +56,11 @@ class ReservaController extends Controller
      */
     public function update(Request $request, Reserva $reserva)
     {
-        //
+        $reserva->update([
+            'estado' => $request->estado
+        ]);
+
+        return back()->with('success', 'Estado actualizado correctamente');
     }
 
     /**

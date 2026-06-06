@@ -30,17 +30,21 @@ class VehiculoController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'marca' => 'required',
-            'modelo' => 'required',
-            'anio' => 'required',
-            'color' => 'required',
-            'placa' => 'required|unique:vehiculos',
-            'precio_dia' => 'required|numeric',
-            'estado' => 'required'
-        ]);
+        $datos = $request->all();
 
-        Vehiculo::create($request->all());
+        if ($request->hasFile('imagen')) {
+            $nombre = time() . '_' . $request->imagen->getClientOriginalName();
+
+            $request->imagen->storeAs(
+                'vehiculos',
+                $nombre,
+                'public'
+            );
+
+            $datos['imagen'] = $nombre;
+        }
+
+        Vehiculo::create($datos);
 
         return redirect()
             ->route('vehiculos.index')

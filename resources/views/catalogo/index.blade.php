@@ -149,11 +149,16 @@
                         <div class="vehicle-image">
 
                             @if($vehiculo->imagen)
-                                <img src="{{ asset('storage/'.$vehiculo->imagen) }}"
-                                     alt="{{ $vehiculo->marca }}">
+
+                                <img src="{{ asset('storage/vehiculos/'.$vehiculo->imagen) }}"
+                                class="img-fluid"
+                                alt="{{ $vehiculo->marca }}">
+
                             @else
-                                <img src="https://via.placeholder.com/600x400?text=Vehículo"
-                                     alt="Vehículo">
+
+                                <img src="https://via.placeholder.com/400x250"
+                                class="img-fluid">
+
                             @endif
 
                         </div>

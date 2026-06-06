@@ -8,19 +8,25 @@
 
     <div class="row">
 
-        <div class="col-md-6">
+        <div class="col-lg-8">
 
             @if($vehiculo->imagen)
-                <img src="{{ asset('storage/'.$vehiculo->imagen) }}"
-                     class="img-fluid rounded shadow">
+
+                <img src="{{ asset('storage/vehiculos/'.$vehiculo->imagen) }}"
+                     class="img-fluid rounded shadow w-100"
+                     style="max-height:600px; object-fit:cover;"
+                     alt="{{ $vehiculo->marca }}">
+
             @else
+
                 <img src="https://via.placeholder.com/800x500"
                      class="img-fluid rounded shadow">
+
             @endif
 
         </div>
 
-        <div class="col-md-6">
+        <div class="col-lg-4">
 
             <h1 class="mb-4">
                 {{ $vehiculo->marca }}
@@ -44,7 +50,7 @@
 
             <p>
                 <strong>Precio por día:</strong>
-                ${{ $vehiculo->precio_dia }}
+                ${{ number_format($vehiculo->precio_dia,2) }}
             </p>
 
             <p>
@@ -59,21 +65,32 @@
 
             @auth
 
-                <a href="{{ route('reservas.create', $vehiculo->id) }}"
-                   class="btn btn-lg"
-                   style="background:#F97316;color:white;">
-                    Reservar Vehículo
-                </a>
+    @if(Auth::user()->is_admin)
 
-            @else
+        <a href="{{ route('vehiculos.edit', $vehiculo->id) }}"
+           class="btn btn-warning btn-lg">
+            Editar Vehículo
+        </a>
 
-                <a href="{{ route('login') }}"
-                   class="btn btn-lg"
-                   style="background:#F97316;color:white;">
-                    Inicia sesión para reservar
-                </a>
+    @else
 
-            @endauth
+        <a href="{{ route('reservas.create', $vehiculo->id) }}"
+           class="btn btn-lg"
+           style="background:#F97316;color:white;">
+            Reservar Vehículo
+        </a>
+
+    @endif
+
+@else
+
+    <a href="{{ route('login') }}"
+       class="btn btn-lg"
+       style="background:#F97316;color:white;">
+        Inicia sesión para reservar
+    </a>
+
+@endauth
 
         </div>
 
