@@ -80,12 +80,12 @@
                                 </td>
 
                                 <td>
-                                    {{ $cliente->nombre }}
+                                    {{ $cliente->name }}
                                     {{ $cliente->apellido }}
                                 </td>
 
                                 <td>
-                                    {{ $cliente->correo }}
+                                    {{ $cliente->email }}
                                 </td>
 
                                 <td>
@@ -111,12 +111,12 @@
                                             Ver
                                         </a>
 
-                                        <a href="#"
+                                        <a href="{{ route('clientes.edit', $cliente) }}"
                                            class="btn btn-warning btn-sm">
                                             Editar
                                         </a>
 
-                                        <form action="#"
+                                        <form action="{{ route('clientes.destroy', $cliente) }}"
                                               method="POST">
 
                                             @csrf
