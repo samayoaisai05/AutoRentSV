@@ -8,6 +8,31 @@
 $user = auth()->user();
 @endphp
 
+{{-- MENSAJE DE ÉXITO --}}
+@if(session('success'))
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    Swal.fire({
+        icon: 'success',
+        title: 'Éxito',
+        text: '{{ session('success') }}',
+        confirmButtonColor: '#F97316',
+        confirmButtonText: 'Aceptar'
+    }).then((result) => {
+
+        if (result.isConfirmed) {
+            window.location.href = "{{ route('dashboard') }}";
+        }
+
+    });
+
+});
+</script>
+
+@endif
+
 <style>
 :root{
     --primary:#0F172A;
@@ -84,8 +109,6 @@ body{
     font-weight:600;
 }
 
-/* FORMULARIOS */
-
 .perfil-form{
     border:none;
     border-radius:20px;
@@ -124,8 +147,6 @@ body{
 }
 </style>
 
-{{-- HEADER --}}
-
 <div class="perfil-header">
     <div class="container text-center">
         <h1 class="fw-bold">Mi Perfil</h1>
@@ -137,107 +158,94 @@ body{
 
 <div class="container pb-5">
 
-```
-<div class="row g-4">
+    <div class="row g-4">
 
-    {{-- PANEL IZQUIERDO --}}
-    <div class="col-lg-4">
+        {{-- PANEL IZQUIERDO --}}
+        <div class="col-lg-4">
 
-        <div class="card card-perfil p-4">
+            <div class="card card-perfil p-4">
 
-            <div class="avatar mb-3">
-                👤
+                <div class="avatar mb-3">
+                    👤
+                </div>
+
+                <div class="text-center mb-4">
+                    <h4>{{ $user->name }}</h4>
+
+                    <span class="badge bg-success">
+                        Cliente Activo
+                    </span>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-label">Correo electrónico</div>
+
+                    <div class="info-value">
+                        {{ $user->email }}
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-label">Teléfono</div>
+
+                    <div class="info-value">
+                        {{ $user->telefono ?? 'No registrado' }}
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-label">Dirección</div>
+
+                    <div class="info-value">
+                        {{ $user->direccion ?? 'No registrada' }}
+                    </div>
+                </div>
+
+                <a href="{{ route('reservas.mis') }}"
+                   class="btn btn-orange w-100 mt-3">
+                    Ver mis reservas
+                </a>
+
             </div>
 
-            <div class="text-center mb-4">
-                <h4>{{ $user->name }}</h4>
-                <span class="badge bg-success">
-                    Cliente Activo
-                </span>
+        </div>
+
+        {{-- PANEL DERECHO --}}
+        <div class="col-lg-8">
+
+            <div class="perfil-form mb-4">
+
+                <h4 class="titulo-seccion">
+                    Editar Información Personal
+                </h4>
+
+                @include('profile.partials.update-profile-information-form')
+
             </div>
 
-            <div class="info-item">
-                <div class="info-label">
-                    Correo electrónico
-                </div>
+            <div class="perfil-form mb-4">
 
-                <div class="info-value">
-                    {{ $user->email }}
-                </div>
+                <h4 class="titulo-seccion">
+                    Cambiar Contraseña
+                </h4>
+
+                @include('profile.partials.update-password-form')
+
             </div>
 
-            <div class="info-item">
-                <div class="info-label">
-                    Teléfono
-                </div>
+            <div class="perfil-form">
 
-                <div class="info-value">
-                    {{ $user->telefono ?? 'No registrado' }}
-                </div>
+                <h4 class="titulo-seccion text-danger">
+                    Zona de Peligro
+                </h4>
+
+                @include('profile.partials.delete-user-form')
+
             </div>
-
-            <div class="info-item">
-                <div class="info-label">
-                    Dirección
-                </div>
-
-                <div class="info-value">
-                    {{ $user->direccion ?? 'No registrada' }}
-                </div>
-            </div>
-
-            <a href="{{ route('reservas.mis') }}"
-               class="btn btn-orange w-100 mt-3">
-                Ver mis reservas
-            </a>
 
         </div>
 
     </div>
-
-
-    {{-- PANEL DERECHO --}}
-    <div class="col-lg-8">
-
-        {{-- DATOS --}}
-        <div class="perfil-form mb-4">
-
-            <h4 class="titulo-seccion">
-                Editar Información Personal
-            </h4>
-
-            @include('profile.partials.update-profile-information-form')
-
-        </div>
-
-
-        {{-- CONTRASEÑA --}}
-        <div class="perfil-form mb-4">
-
-            <h4 class="titulo-seccion">
-                Cambiar Contraseña
-            </h4>
-
-            @include('profile.partials.update-password-form')
-
-        </div>
-
-
-        {{-- ELIMINAR CUENTA --}}
-        <div class="perfil-form">
-
-            <h4 class="titulo-seccion text-danger">
-                Zona de Peligro
-            </h4>
-
-            @include('profile.partials.delete-user-form')
-
-        </div>
-
-    </div>
-
-</div>
-```
 
 </div>
 

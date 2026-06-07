@@ -11,7 +11,9 @@ use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
-
+    /**
+     * Mostrar perfil.
+     */
     public function edit(Request $request): View
     {
         return view('cliente.perfil', [
@@ -20,7 +22,7 @@ class ProfileController extends Controller
     }
 
     /**
-     * Update the user's profile information.
+     * Actualizar perfil.
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
@@ -32,11 +34,12 @@ class ProfileController extends Controller
 
         $request->user()->save();
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        return Redirect::route('profile.edit')
+            ->with('success', 'Información actualizada correctamente.');
     }
 
     /**
-     * Delete the user's account.
+     * Eliminar cuenta.
      */
     public function destroy(Request $request): RedirectResponse
     {

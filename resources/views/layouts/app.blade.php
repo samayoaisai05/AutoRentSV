@@ -239,5 +239,75 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+@if(session('success'))
+<script>
+Swal.fire({
+    icon: 'success',
+    title: 'Éxito',
+    text: "{{ session('success') }}",
+    confirmButtonColor: '#F97316'
+});
+</script>
+@endif
+
+@if(session('error'))
+<script>
+Swal.fire({
+    icon: 'error',
+    title: 'Error',
+    text: "{{ session('error') }}",
+    confirmButtonColor: '#dc3545'
+});
+</script>
+@endif
+
+@if(session('warning'))
+<script>
+Swal.fire({
+    icon: 'warning',
+    title: 'Advertencia',
+    text: "{{ session('warning') }}",
+    confirmButtonColor: '#ffc107'
+});
+</script>
+@endif
+
+@if(session('info'))
+<script>
+Swal.fire({
+    icon: 'info',
+    title: 'Información',
+    text: "{{ session('info') }}",
+    confirmButtonColor: '#0dcaf0'
+});
+</script>
+@endif
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+@if(session('success'))
+<script>
+Swal.fire({
+    icon: 'success',
+    title: 'Perfil actualizado',
+    text: '{{ session("success") }}',
+    confirmButtonColor: '#F97316'
+});
+</script>
+@endif
+
+@if(session('error'))
+<script>
+Swal.fire({
+    icon: 'error',
+    title: 'Error',
+    text: '{{ session("error") }}',
+    confirmButtonColor: '#dc3545'
+});
+</script>
+@endif
+
 </body>
 </html>

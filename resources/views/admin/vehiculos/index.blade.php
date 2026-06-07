@@ -66,25 +66,28 @@
 
                 <td>
 
-                    <a href="{{ route('vehiculos.edit',$vehiculo->id) }}"
-                       class="btn btn-primary btn-sm">
-                        Editar
-                    </a>
+    <a href="{{ route('vehiculos.edit',$vehiculo->id) }}"
+       class="btn btn-primary btn-sm">
+        Editar
+    </a>
 
-                    <form action="{{ route('vehiculos.destroy',$vehiculo->id) }}"
-                          method="POST"
-                          class="d-inline">
+    <form id="formEliminar{{ $vehiculo->id }}"
+          action="{{ route('vehiculos.destroy',$vehiculo->id) }}"
+          method="POST"
+          class="d-inline">
 
-                        @csrf
-                        @method('DELETE')
+        @csrf
+        @method('DELETE')
 
-                        <button class="btn btn-danger btn-sm">
-                            Eliminar
-                        </button>
+        <button type="button"
+                class="btn btn-danger btn-sm"
+                onclick="confirmarEliminar({{ $vehiculo->id }})">
+            Eliminar
+        </button>
 
-                    </form>
+    </form>
 
-                </td>
+</td>
 
             </tr>
 
@@ -95,5 +98,28 @@
     </table>
 
 </div>
+
+<script>
+function confirmarEliminar(id){
+
+    Swal.fire({
+        title: '¿Eliminar vehículo?',
+        text: 'Esta acción no se puede deshacer',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#F97316',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+    }).then((result)=>{
+
+        if(result.isConfirmed){
+            document.getElementById('formEliminar'+id).submit();
+        }
+
+    });
+
+}
+</script>
 
 @endsection
