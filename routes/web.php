@@ -48,6 +48,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/reservar', [ReservaController::class, 'store'])
         ->name('reservas.store');
 
+    Route::get('/factura/{reserva}', [ReservaController::class, 'factura'])
+    ->name('factura');
+
     //Vehículos de admin
 
     Route::resource('vehiculos', VehiculoController::class);
@@ -70,6 +73,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/reservas', [ReservaController::class, 'index'])
     ->name('admin.reservas.index');
 
+    Route::get('/reportes/reservas-filtradas', [ReporteController::class, 'reservasFiltradasPdf'])
+    ->name('reportes.reservas.filtradas');
 
     Route::put('/admin/reservas/{reserva}', [ReservaController::class, 'update'])
         ->name('admin.reservas.update');

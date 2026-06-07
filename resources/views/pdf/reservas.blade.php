@@ -9,49 +9,82 @@
 body{
     font-family: Arial, sans-serif;
     color:#374151;
+    margin:20px;
+    font-size:12px;
 }
 
-h1{
-    text-align:center;
-    color:#0F172A;
-}
-
+/* HEADER */
 .header{
+    text-align:center;
     border-bottom:3px solid #F97316;
     margin-bottom:20px;
     padding-bottom:10px;
 }
 
+.header img{
+    width:90px;
+    margin-bottom:5px;
+}
+
+.header h1{
+    margin:0;
+    color:#0F172A;
+    font-size:18px;
+}
+
+/* TABLA */
 table{
     width:100%;
     border-collapse:collapse;
+    font-size:12px;
 }
 
 th{
     background:#1E3A5F;
     color:white;
-    padding:10px;
-    border:1px solid #ddd;
-}
-
-td{
     padding:8px;
     border:1px solid #ddd;
 }
 
+td{
+    padding:7px;
+    border:1px solid #ddd;
+    text-align:center;
+}
+
+/* FOOTER */
 .footer{
     margin-top:20px;
     text-align:center;
-    font-size:12px;
+    font-size:11px;
+    color:#6b7280;
+    border-top:1px solid #e5e7eb;
+    padding-top:8px;
+}
+
+/* BADGE */
+.badge{
+    background:#F97316;
+    color:white;
+    padding:3px 8px;
+    border-radius:5px;
+    font-size:11px;
 }
 
 </style>
 </head>
+
 <body>
 
+{{-- HEADER --}}
 <div class="header">
+
+    {{-- LOGO --}}
+    <img src="{{ public_path('img/logo.png') }}">
+
     <h1>AutoRent SV</h1>
     <p>Reporte de Reservas</p>
+
 </div>
 
 <table>
@@ -89,12 +122,12 @@ td{
 
             <td>{{ $reserva->fecha_fin }}</td>
 
-            <td>
-                ${{ number_format($reserva->total,2) }}
-            </td>
+            <td>${{ number_format($reserva->total,2) }}</td>
 
             <td>
-                {{ $reserva->estado }}
+                <span class="badge">
+                    {{ $reserva->estado }}
+                </span>
             </td>
 
         </tr>
@@ -107,6 +140,8 @@ td{
 
 <div class="footer">
     Fecha de generación: {{ date('d/m/Y H:i:s') }}
+    <br>
+    © {{ date('Y') }} AutoRent SV
 </div>
 
 </body>
