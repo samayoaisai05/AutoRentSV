@@ -7,6 +7,10 @@ use App\Models\User;
 use App\Models\Reserva;
 use App\Models\Vehiculo;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+
+
 
 class ReporteController extends Controller
 {
@@ -23,29 +27,24 @@ class ReporteController extends Controller
         ));
     }
 
-    public function reservasFiltradasPdf(Request $request)
+    public function reservasFiltradas(Request $request)
     {
         $query = Reserva::with(['user', 'vehiculo']);
 
-        // FILTRO POR FECHAS
-        if ($request->inicio && $request->fin) {
-            $query->whereBetween('fecha_inicio', [$request->inicio, $request->fin]);
-        }
-
-        // FILTRO POR MES
+        // 🔥 FILTRO POR MES
         if ($request->mes) {
-            $query->whereMonth('fecha_inicio', $request->mes);
+            $query->whereMonth('created_at', $request->mes);
         }
 
-        // FILTRO POR SEMANA
-        if ($request->semana) {
-            $query->whereBetween('fecha_inicio', [
-                now()->startOfWeek(),
-                now()->endOfWeek()
+        // 🔥 FILTRO POR FECHAS
+        if ($request->inicio && $request->fin) {
+            $query->whereBetween('created_at', [
+                Carbon::parse($request->inicio),
+                Carbon::parse($request->fin)
             ]);
         }
 
-        $reservas = $query->latest()->get();
+        $reservas = $query->get();
 
         return Pdf::loadView('pdf.reservas', compact('reservas'))
             ->stream('reporte-reservas.pdf');

@@ -1,33 +1,54 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\VehiculoController;
 use App\Http\Controllers\ReservaController;
-use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ReporteController;
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UsuarioController;
 
-//Rutas públicas
+/*
+|--------------------------------------------------------------------------
+| Rutas públicas
+|--------------------------------------------------------------------------
+*/
+
 Route::get('/', function () {
     return view('home.index');
 })->name('home');
 
-//Cátalogo público
 Route::get('/catalogo', [VehiculoController::class, 'catalogo'])
     ->name('catalogo.index');
 
 Route::get('/catalogo/{vehiculo}', [VehiculoController::class, 'show'])
     ->name('catalogo.show');
 
-//Dashboard
+
+/*
+|--------------------------------------------------------------------------
+| Dashboard
+|--------------------------------------------------------------------------
+*/
 
 Route::get('/dashboard', [HomeController::class, 'dashboard'])
-    ->middleware(['auth'])
+    ->middleware('auth')
     ->name('dashboard');
 
-//Perfil de Breeze
+
+/*
+|--------------------------------------------------------------------------
+| Rutas protegidas
+|--------------------------------------------------------------------------
+*/
+
 Route::middleware('auth')->group(function () {
+
+    /*
+    |--------------------------------------------------------------------------
+    | Perfil
+    |--------------------------------------------------------------------------
+    */
 
     Route::get('/profile', [ProfileController::class, 'edit'])
         ->name('profile.edit');
@@ -38,7 +59,17 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])
         ->name('profile.destroy');
 
-    //Reservas de clientes
+    Route::get('/mi-perfil', function () {
+    return view('cliente.perfil');
+})->middleware('auth')->name('cliente.perfil');
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Cliente
+    |--------------------------------------------------------------------------
+    */
+
     Route::get('/mis-reservas', [ReservaController::class, 'misReservas'])
         ->name('reservas.mis');
 
@@ -49,13 +80,24 @@ Route::middleware('auth')->group(function () {
         ->name('reservas.store');
 
     Route::get('/factura/{reserva}', [ReservaController::class, 'factura'])
-    ->name('factura');
+        ->name('factura');
 
-    //Vehículos de admin
+
+    /*
+    |--------------------------------------------------------------------------
+    | Vehículos (Admin)
+    |--------------------------------------------------------------------------
+    */
 
     Route::resource('vehiculos', VehiculoController::class);
 
-    //Clientes
+
+    /*
+    |--------------------------------------------------------------------------
+    | Clientes (Admin)
+    |--------------------------------------------------------------------------
+    */
+
     Route::get('/clientes', [UsuarioController::class, 'index'])
         ->name('clientes.index');
 
@@ -68,18 +110,26 @@ Route::middleware('auth')->group(function () {
     Route::delete('/clientes/{cliente}', [UsuarioController::class, 'destroy'])
         ->name('clientes.destroy');
 
-    //Reservas de admin
+
+    /*
+    |--------------------------------------------------------------------------
+    | Reservas (Admin)
+    |--------------------------------------------------------------------------
+    */
 
     Route::get('/admin/reservas', [ReservaController::class, 'index'])
-    ->name('admin.reservas.index');
-
-    Route::get('/reportes/reservas-filtradas', [ReporteController::class, 'reservasFiltradasPdf'])
-    ->name('reportes.reservas.filtradas');
+        ->name('admin.reservas.index');
 
     Route::put('/admin/reservas/{reserva}', [ReservaController::class, 'update'])
         ->name('admin.reservas.update');
 
-    //Reportes
+
+    /*
+    |--------------------------------------------------------------------------
+    | Reportes
+    |--------------------------------------------------------------------------
+    */
+
     Route::get('/reportes', [ReporteController::class, 'index'])
         ->name('reportes.index');
 
@@ -91,6 +141,13 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/reportes/reservas', [ReporteController::class, 'reservasPdf'])
         ->name('reportes.reservas');
+
+    Route::get('/reportes/reservas/filtradas', [ReporteController::class, 'reservasFiltradas'])
+        ->name('reportes.reservas.filtradas');
+
+    Route::get('/reportes/ingresos', [ReporteController::class, 'ingresos'])
+        ->name('reportes.ingresos');
+
 });
 
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';
