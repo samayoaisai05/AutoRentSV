@@ -39,7 +39,7 @@
 
 <div class="dashboard-hero">
     <div class="container">
-        <h1 class="fw-bold mb-2">Bienvenido, {{ $usuario->name }}</h1>
+        <h1 class="fw-bold mb-2">Bienvenidos, {{ $usuario->name }}</h1>
         <p class="mb-0 text-white">Aquí puedes ver tu información personal, el resumen de tus reservas y el total gastado en AutoRent SV.</p>
     </div>
 </div>
