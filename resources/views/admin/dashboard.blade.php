@@ -5,169 +5,208 @@
 @section('content')
 
 <style>
-    :root{
-        --primary:#0F172A;
-        --secondary:#1E3A5F;
-        --accent:#F97316;
-        --light:#F8FAFC;
-        --white:#FFFFFF;
-    }
+:root{
+    --primary:#0F172A;
+    --secondary:#1E3A5F;
+    --accent:#F97316;
+    --light:#F8FAFC;
+}
 
-    body{
-        background-color: var(--light);
-    }
+.header-dashboard{
+    background: linear-gradient(135deg,var(--primary),var(--secondary));
+    color:white;
+    padding:50px 0;
+    margin-bottom:40px;
+}
 
-    .header-dashboard{
-        background: linear-gradient(135deg,var(--primary),var(--secondary));
-        color: white;
-        padding: 50px 0;
-        margin-bottom: 40px;
-        border-radius: 0 0 20px 20px;
-    }
+.card-stat{
+    border:none;
+    border-radius:15px;
+    box-shadow:0 5px 15px rgba(0,0,0,.1);
+    transition:.3s;
+    height:100%;
+}
 
-    .card-stat{
-        border: none;
-        border-radius: 15px;
-        box-shadow: 0 5px 15px rgba(0,0,0,.1);
-        transition: .3s;
-    }
+.card-stat:hover{
+    transform:translateY(-5px);
+}
 
-    .card-stat:hover{
-        transform: translateY(-5px);
-    }
+.number{
+    font-size:2rem;
+    font-weight:bold;
+    color:var(--accent);
+}
 
-    .number{
-        font-size: 2rem;
-        font-weight: bold;
-        color: var(--accent);
-    }
+.icon{
+    font-size:2.5rem;
+}
 
-    .card-option{
-        border: none;
-        border-radius: 15px;
-        box-shadow: 0 5px 15px rgba(0,0,0,.1);
-        transition: .3s;
-        height: 100%;
-    }
-
-    .card-option:hover{
-        transform: translateY(-5px);
-    }
-
-    .btn-custom{
-        background-color: var(--accent);
-        color: white;
-        border: none;
-    }
-
-    .btn-custom:hover{
-        background-color: #EA580C;
-        color: white;
-    }
-
-    .icon{
-        font-size: 3rem;
-    }
+.chart-card{
+    border:none;
+    border-radius:15px;
+    padding:20px;
+    box-shadow:0 5px 15px rgba(0,0,0,.08);
+}
 </style>
 
 <div class="header-dashboard">
     <div class="container text-center">
         <h1>Panel de Administración</h1>
-        <p>
-            Bienvenido {{ Auth::user()->name }},
-            administra todas las operaciones de AutoRent SV.
-        </p>
+        <p>Bienvenido {{ Auth::user()->name }}</p>
     </div>
 </div>
 
 <div class="container">
 
-    {{-- Estadísticas --}}
-    <div class="row mb-5">
+    {{-- CARDS --}}
+    <div class="row mb-4">
 
-        <div class="col-md-3 mb-3">
+        <div class="col-md-3">
             <div class="card card-stat text-center p-4">
                 <div class="icon">🚗</div>
                 <div class="number">{{ $totalVehiculos }}</div>
-                <h5>Vehículos</h5>
+                <h6>Vehículos</h6>
             </div>
         </div>
 
-        <div class="col-md-3 mb-3">
+        <div class="col-md-3">
             <div class="card card-stat text-center p-4">
                 <div class="icon">👥</div>
                 <div class="number">{{ $totalClientes }}</div>
-                <h5>Clientes</h5>
+                <h6>Clientes</h6>
             </div>
         </div>
 
-        <div class="col-md-3 mb-3">
+        <div class="col-md-3">
             <div class="card card-stat text-center p-4">
                 <div class="icon">📋</div>
                 <div class="number">{{ $totalReservas }}</div>
-                <h5>Reservas</h5>
+                <h6>Reservas</h6>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card card-stat text-center p-4">
+                <div class="icon">💰</div>
+                <div class="number">
+                    ${{ number_format($totalIngresos,2) }}
+                </div>
+                <h6>Ingresos</h6>
             </div>
         </div>
 
     </div>
 
-    {{-- Accesos rápidos --}}
-    <div class="row g-4">
+    {{-- FILTRO --}}
+    <form method="GET" class="mb-3">
+        <select name="tipo" class="form-select w-25" onchange="this.form.submit()">
+            <option value="dia" {{ $tipo == 'dia' ? 'selected' : '' }}>Día</option>
+            <option value="semana" {{ $tipo == 'semana' ? 'selected' : '' }}>Semana</option>
+            <option value="mes" {{ $tipo == 'mes' ? 'selected' : '' }}>Mes</option>
+            <option value="anio" {{ $tipo == 'anio' ? 'selected' : '' }}>Año</option>
+        </select>
+    </form>
 
-        <div class="col-md-3">
-            <div class="card card-option p-4 text-center">
-                <div class="icon">🚗</div>
-                <h4>Vehículos</h4>
-                <p>Administrar la flota disponible.</p>
+    {{-- GRAFICA --}}
+    <div class="chart-card">
+        <canvas id="graficaIngresos" height="70"></canvas>
+    </div>
 
-                <a href="{{ route('vehiculos.index') }}"
-                   class="btn btn-custom">
-                    Gestionar
-                </a>
-            </div>
+    {{-- ACCESOS RÁPIDOS --}}
+<div class="row g-4 mt-5">
+
+    <div class="col-md-3">
+        <div class="card card-stat text-center p-4">
+            <div class="icon">🚗</div>
+
+            <h4>Vehículos</h4>
+
+            <p class="text-muted">
+                Administrar la flota disponible.
+            </p>
+
+            <a href="{{ route('vehiculos.index') }}"
+               class="btn btn-warning text-white">
+                Gestionar
+            </a>
         </div>
+    </div>
 
-        <div class="col-md-3">
-            <div class="card card-option p-4 text-center">
-                <div class="icon">👥</div>
-                <h4>Clientes</h4>
-                <p>Consultar clientes registrados.</p>
+    <div class="col-md-3">
+        <div class="card card-stat text-center p-4">
+            <div class="icon">👥</div>
 
-                <a href="{{ route('clientes.index') }}"
-                   class="btn btn-custom">
-                    Gestionar
-                </a>
-            </div>
+            <h4>Clientes</h4>
+
+            <p class="text-muted">
+                Consultar clientes registrados.
+            </p>
+
+            <a href="{{ route('clientes.index') }}"
+               class="btn btn-warning text-white">
+                Gestionar
+            </a>
         </div>
+    </div>
 
-        <div class="col-md-3">
-            <div class="card card-option p-4 text-center">
-                <div class="icon">📋</div>
-                <h4>Reservas</h4>
-                <p>Administrar reservas realizadas.</p>
+    <div class="col-md-3">
+        <div class="card card-stat text-center p-4">
+            <div class="icon">📋</div>
 
-                <a href="{{ route('admin.reservas.index') }}"
-                   class="btn btn-custom">
-                    Gestionar
-                </a>
-            </div>
+            <h4>Reservas</h4>
+
+            <p class="text-muted">
+                Administrar reservas realizadas.
+            </p>
+
+            <a href="{{ route('admin.reservas.index') }}"
+               class="btn btn-warning text-white">
+                Gestionar
+            </a>
         </div>
+    </div>
 
-        <div class="col-md-3">
-            <div class="card card-option p-4 text-center">
-                <div class="icon">📊</div>
-                <h4>Reportes</h4>
-                <p>Generar reportes del sistema.</p>
+    <div class="col-md-3">
+        <div class="card card-stat text-center p-4">
+            <div class="icon">📊</div>
 
-                <a href="{{ route('reportes.index') }}"
-                   class="btn btn-custom">
-                    Ver Reportes
-                </a>
-            </div>
+            <h4>Reportes</h4>
+
+            <p class="text-muted">
+                Generar reportes del sistema.
+            </p>
+
+            <a href="{{ route('reportes.index') }}"
+               class="btn btn-warning text-white">
+                Ver Reportes
+            </a>
         </div>
-
     </div>
 
 </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+const ctx = document.getElementById('graficaIngresos').getContext('2d');
+
+new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: @json($meses),
+        datasets: [{
+            label: 'Ingresos ($)',
+            data: @json($totales),
+            borderColor: '#F97316',
+            backgroundColor: 'rgba(249,115,22,0.1)',
+            borderWidth: 2,
+            tension: 0.4,
+            pointRadius: 3
+        }]
+    }
+});
+</script>
 
 @endsection
