@@ -1,201 +1,201 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Factura AutoRent SV</title>
+<meta charset="UTF-8">
+<title>Factura AutoRent SV</title>
 
-    <style>
-        body{
-            font-family: Arial, Helvetica, sans-serif;
-            color: #374151;
-            margin: 30px;
-        }
+<style>
 
-        .header{
-            text-align: center;
-            border-bottom: 3px solid #F97316;
-            padding-bottom: 15px;
-            margin-bottom: 30px;
-        }
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    color:#374151;
+    margin:20px;
+    font-size:12px;
+}
 
-        .header h1{
-            color: #0F172A;
-            margin: 0;
-        }
+/* CONTENEDOR PARA EVITAR SALTOS */
+.page{
+    page-break-inside: avoid;
+}
 
-        .header p{
-            margin: 5px 0;
-        }
+/* HEADER */
+.header{
+    text-align:center;
+    border-bottom:3px solid #F97316;
+    padding-bottom:10px;
+    margin-bottom:15px;
+}
 
-        .section{
-            margin-bottom: 25px;
-        }
+.header img{
+    width:90px;
+    margin-bottom:5px;
+}
 
-        .section-title{
-            background-color: #0F172A;
-            color: white;
-            padding: 8px;
-            font-size: 14px;
-            font-weight: bold;
-        }
+.header h1{
+    margin:0;
+    color:#0F172A;
+    font-size:18px;
+}
 
-        table{
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
+/* SECCIONES */
+.section{
+    margin-bottom:12px;
+}
 
-        table th{
-            background-color: #1E3A5F;
-            color: white;
-            padding: 10px;
-            border: 1px solid #ddd;
-        }
+.section-title{
+    background:#0F172A;
+    color:white;
+    padding:6px;
+    font-size:12px;
+    margin-bottom:6px;
+}
 
-        table td{
-            padding: 10px;
-            border: 1px solid #ddd;
-        }
+/* TABLAS */
+table{
+    width:100%;
+    border-collapse:collapse;
+}
 
-        .total{
-            margin-top: 20px;
-            text-align: right;
-            font-size: 18px;
-            font-weight: bold;
-            color: #F97316;
-        }
+td, th{
+    border:1px solid #ddd;
+    padding:6px;
+}
 
-        .footer{
-            margin-top: 50px;
-            text-align: center;
-            font-size: 12px;
-            color: #6b7280;
-        }
-    </style>
+th{
+    background:#1E3A5F;
+    color:white;
+    font-size:11px;
+}
+
+/* TOTAL */
+.total{
+    margin-top:10px;
+    text-align:right;
+    font-size:14px;
+    font-weight:bold;
+    color:#F97316;
+}
+
+/* BADGE */
+.badge{
+    background:#F97316;
+    color:white;
+    padding:3px 8px;
+    border-radius:5px;
+    font-size:11px;
+}
+
+/* FOOTER */
+.footer{
+    margin-top:15px;
+    text-align:center;
+    font-size:10px;
+    color:#6b7280;
+}
+
+</style>
 </head>
+
 <body>
 
-    <div class="header">
-        <h1>AutoRent SV</h1>
-        <p>Sistema de Alquiler de Vehículos</p>
-        <p>Factura de Reserva</p>
+<div class="page">
+
+{{-- HEADER --}}
+<div class="header">
+    <img src="{{ public_path('img/logo.png') }}">
+    <h1>AutoRent SV</h1>
+    <p>Factura de Reserva</p>
+</div>
+
+{{-- VALIDACIÓN --}}
+@if($reserva->estado != 'Aprobada')
+
+    <h3 style="text-align:center;color:red;">
+        Factura disponible solo cuando la reserva está aprobada.
+    </h3>
+
+@else
+
+{{-- INFO --}}
+<div class="section">
+    <div class="section-title">Factura</div>
+
+    <table>
+        <tr>
+            <td><strong>N°</strong> #{{ $reserva->id }}</td>
+            <td><strong>Estado:</strong> <span class="badge">{{ $reserva->estado }}</span></td>
+            <td><strong>Fecha:</strong> {{ date('d/m/Y') }}</td>
+            <td><strong>Hora:</strong> {{ date('H:i:s') }}</td>
+        </tr>
+    </table>
+</div>
+
+{{-- CLIENTE --}}
+<div class="section">
+    <div class="section-title">Cliente</div>
+
+    <table>
+        <tr>
+            <td><strong>Nombre:</strong> {{ $reserva->user->name }}</td>
+            <td><strong>Correo:</strong> {{ $reserva->user->email }}</td>
+            <td><strong>Tel:</strong> {{ $reserva->user->telefono }}</td>
+        </tr>
+    </table>
+</div>
+
+{{-- VEHÍCULO --}}
+<div class="section">
+    <div class="section-title">Vehículo</div>
+
+    <table>
+        <tr>
+            <td><strong>Marca:</strong> {{ $reserva->vehiculo->marca }}</td>
+            <td><strong>Modelo:</strong> {{ $reserva->vehiculo->modelo }}</td>
+            <td><strong>Año:</strong> {{ $reserva->vehiculo->anio }}</td>
+            <td><strong>Color:</strong> {{ $reserva->vehiculo->color }}</td>
+        </tr>
+    </table>
+</div>
+
+{{-- DETALLE --}}
+<div class="section">
+    <div class="section-title">Detalle</div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Inicio</th>
+                <th>Fin</th>
+                <th>Días</th>
+                <th>Precio Día</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>{{ $reserva->fecha_inicio }}</td>
+                <td>{{ $reserva->fecha_fin }}</td>
+                <td>{{ $reserva->dias }}</td>
+                <td>${{ number_format($reserva->precio_dia,2) }}</td>
+                <td>${{ number_format($reserva->total,2) }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="total">
+        Total a pagar: ${{ number_format($reserva->total,2) }}
     </div>
+</div>
 
-    <div class="section">
-        <div class="section-title">
-            Información de la Factura
-        </div>
+@endif
 
-        <table>
-            <tr>
-                <td><strong>Factura N°</strong></td>
-                <td>#{{ $reserva->id }}</td>
-            </tr>
+{{-- FOOTER --}}
+<div class="footer">
+    AutoRent SV - Documento generado automáticamente
+</div>
 
-            <tr>
-                <td><strong>Fecha de Emisión</strong></td>
-                <td>{{ date('d/m/Y') }}</td>
-            </tr>
-        </table>
-    </div>
-
-    <div class="section">
-        <div class="section-title">
-            Datos del Cliente
-        </div>
-
-        <table>
-            <tr>
-                <td><strong>Nombre</strong></td>
-                <td>
-                    {{ $reserva->user->name }}
-                    {{ $reserva->user->apellido }}
-                </td>
-            </tr>
-
-            <tr>
-                <td><strong>Correo</strong></td>
-                <td>{{ $reserva->user->email }}</td>
-            </tr>
-
-            <tr>
-                <td><strong>Teléfono</strong></td>
-                <td>{{ $reserva->user->telefono }}</td>
-            </tr>
-        </table>
-    </div>
-
-    <div class="section">
-        <div class="section-title">
-            Información del Vehículo
-        </div>
-
-        <table>
-            <tr>
-                <td><strong>Marca</strong></td>
-                <td>{{ $reserva->vehiculo->marca }}</td>
-            </tr>
-
-            <tr>
-                <td><strong>Modelo</strong></td>
-                <td>{{ $reserva->vehiculo->modelo }}</td>
-            </tr>
-
-            <tr>
-                <td><strong>Año</strong></td>
-                <td>{{ $reserva->vehiculo->anio }}</td>
-            </tr>
-
-            <tr>
-                <td><strong>Color</strong></td>
-                <td>{{ $reserva->vehiculo->color }}</td>
-            </tr>
-
-            <tr>
-                <td><strong>Placa</strong></td>
-                <td>{{ $reserva->vehiculo->placa }}</td>
-            </tr>
-        </table>
-    </div>
-
-    <div class="section">
-        <div class="section-title">
-            Detalle de la Reserva
-        </div>
-
-        <table>
-            <thead>
-                <tr>
-                    <th>Fecha Inicio</th>
-                    <th>Fecha Fin</th>
-                    <th>Días</th>
-                    <th>Precio por Día</th>
-                    <th>Total</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                <tr>
-                    <td>{{ $reserva->fecha_inicio }}</td>
-                    <td>{{ $reserva->fecha_fin }}</td>
-                    <td>{{ $reserva->dias }}</td>
-                    <td>${{ number_format($reserva->precio_dia, 2) }}</td>
-                    <td>${{ number_format($reserva->total, 2) }}</td>
-                </tr>
-            </tbody>
-        </table>
-
-        <div class="total">
-            Total a Pagar:
-            ${{ number_format($reserva->total, 2) }}
-        </div>
-    </div>
-
-    <div class="footer">
-        Gracias por confiar en AutoRent SV.
-        <br>
-        Documento generado automáticamente por el sistema.
-    </div>
+</div>
 
 </body>
 </html>

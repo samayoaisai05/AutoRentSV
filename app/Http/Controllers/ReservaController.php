@@ -7,12 +7,22 @@ use App\Models\Vehiculo;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class ReservaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    public function factura($id)
+    {
+        $reserva = Reserva::with(['user', 'vehiculo'])->findOrFail($id);
+
+        // Solo se descarga si está aprobada
+        if ($reserva->estado !== 'Aprobada') {
+            abort(403, 'Factura no disponible');
+        }
+
+        return Pdf::loadView('pdf.factura', compact('reserva'))
+            ->stream('factura-' . $reserva->id . '.pdf');
+    }
     public function index()
     {
         $reservas = Reserva::with(['user', 'vehiculo'])
