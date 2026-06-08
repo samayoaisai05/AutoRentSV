@@ -56,7 +56,7 @@ class VehiculoController extends Controller
      */
     public function catalogo()
     {
-        $vehiculos = Vehiculo::where('estado', 'Disponible')->get();
+        $vehiculos = Vehiculo::all();
 
         return view('catalogo.index', compact('vehiculos'));
     }

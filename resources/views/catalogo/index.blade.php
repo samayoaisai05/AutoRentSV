@@ -91,6 +91,15 @@
         font-weight: 600;
     }
 
+    .badge-reservado{
+        background-color: #ef4444;
+        color: white;
+        padding: 8px 14px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+
     .btn-detalle{
         background-color: var(--accent);
         color: var(--white);
@@ -127,8 +136,8 @@
 <!-- Encabezado -->
 <div class="catalog-header">
     <div class="container">
-        <h1>Vehículos Disponibles</h1>
-        <p>Encuentra el vehículo ideal para tu próximo viaje</p>
+        <h1>Catálogo de Vehículos</h1>
+        <p>Encuentra el vehículo ideal para tu próximo viaje.</p>
     </div>
 </div>
 
@@ -167,7 +176,7 @@
                         <div class="vehicle-info">
 
                             <h4 class="vehicle-title">
-                                {{ $vehiculo->marca }}
+                                {{ $vehiculo->marca }} {{ $vehiculo->modelo }}
                             </h4>
 
                             <div class="vehicle-detail">
@@ -180,9 +189,14 @@
                                 {{ $vehiculo->color }}
                             </div>
 
+                            <div class="vehicle-detail">
+                                <strong>Precio por día:</strong>
+                                ${{ number_format($vehiculo->precio_dia, 2) }}
+                            </div>
+
                             <div class="mt-3">
-                                <span class="badge-disponible">
-                                    Disponible
+                                <span class="{{ $vehiculo->estado === 'Disponible' ? 'badge-disponible' : 'badge-reservado' }}">
+                                    {{ $vehiculo->estado === 'Disponible' ? 'Disponible' : 'Reservado' }}
                                 </span>
                             </div>
 
