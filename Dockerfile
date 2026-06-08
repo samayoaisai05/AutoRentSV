@@ -1,7 +1,8 @@
 FROM php:8.2-apache
 
-# 1. Habilitar el módulo rewrite de Apache (Crucial para las rutas de Laravel)
-RUN a2enmod rewrite
+# 1. Resolver conflicto de MPMs y habilitar rewrite de Apache
+RUN a2dismod mpm_event mpm_worker || true \
+    && a2enmod mpm_prefork rewrite
 
 # Instalar dependencias del sistema
 RUN apt-get update && apt-get install -y \
