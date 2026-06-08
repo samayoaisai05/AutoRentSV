@@ -57,7 +57,7 @@
         </p>
 
         <a href="{{ route('dashboard') }}" class="btn-home">
-            Ir al Dashboard
+            Ir al panel de control
         </a>
 
     </div>

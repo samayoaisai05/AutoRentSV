@@ -17,7 +17,7 @@
 
         <a href="{{ route('dashboard') }}"
            class="btn btn-outline-dark">
-            Volver al dashboard
+            Volver al panel de control
         </a>
 
     </div>

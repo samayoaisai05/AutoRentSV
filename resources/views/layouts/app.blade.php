@@ -178,7 +178,7 @@
 
                             <li>
                                 <a class="dropdown-item fw-semibold" href="{{ route('dashboard') }}">
-                                    📊 Dashboard
+                                    📊 Panel de control
                                 </a>
                             </li>
 
