@@ -157,18 +157,15 @@
                         <!-- Imagen -->
                         <div class="vehicle-image">
 
-                            @if($vehiculo->imagen)
+                            @php
+                                $imagenCatalogo = !empty($vehiculo->imagen) && file_exists(public_path('storage/vehiculos/' . $vehiculo->imagen))
+                                    ? asset('storage/vehiculos/' . $vehiculo->imagen)
+                                    : asset('img/no-image.svg');
+                            @endphp
 
-                                <img src="{{ asset('storage/vehiculos/'.$vehiculo->imagen) }}"
-                                class="img-fluid"
-                                alt="{{ $vehiculo->marca }}">
-
-                            @else
-
-                                <img src="https://via.placeholder.com/400x250"
-                                class="img-fluid">
-
-                            @endif
+                            <img src="{{ $imagenCatalogo }}"
+                                 class="img-fluid"
+                                 alt="{{ $vehiculo->marca }} {{ $vehiculo->modelo }}">
 
                         </div>
 

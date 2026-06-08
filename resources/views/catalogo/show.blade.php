@@ -10,19 +10,16 @@
 
         <div class="col-lg-8">
 
-            @if($vehiculo->imagen)
+            @php
+                $imagenDetalle = !empty($vehiculo->imagen) && file_exists(public_path('storage/vehiculos/' . $vehiculo->imagen))
+                    ? asset('storage/vehiculos/' . $vehiculo->imagen)
+                    : asset('img/no-image.svg');
+            @endphp
 
-                <img src="{{ asset('storage/vehiculos/'.$vehiculo->imagen) }}"
-                     class="img-fluid rounded shadow w-100"
-                     style="max-height:600px; object-fit:cover;"
-                     alt="{{ $vehiculo->marca }}">
-
-            @else
-
-                <img src="https://via.placeholder.com/800x500"
-                     class="img-fluid rounded shadow">
-
-            @endif
+            <img src="{{ $imagenDetalle }}"
+                 class="img-fluid rounded shadow w-100"
+                 style="max-height:600px; object-fit:cover;"
+                 alt="{{ $vehiculo->marca }} {{ $vehiculo->modelo }}">
 
         </div>
 

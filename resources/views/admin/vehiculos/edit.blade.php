@@ -15,7 +15,8 @@
         <div class="card-body">
 
             <form action="{{ route('vehiculos.update',$vehiculo->id) }}"
-                  method="POST">
+                  method="POST"
+                  enctype="multipart/form-data">
 
                 @csrf
                 @method('PUT')
@@ -84,6 +85,31 @@
                            name="precio_dia"
                            value="{{ $vehiculo->precio_dia }}"
                            class="form-control">
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label>Imagen del Vehículo</label>
+
+                    @php
+                        $imagenActual = !empty($vehiculo->imagen) && file_exists(public_path('storage/vehiculos/' . $vehiculo->imagen))
+                            ? asset('storage/vehiculos/' . $vehiculo->imagen)
+                            : asset('img/no-image.svg');
+                    @endphp
+
+                    <div class="mb-2">
+                        <img src="{{ $imagenActual }}"
+                             alt="Imagen actual del vehículo"
+                             class="img-fluid rounded"
+                             style="max-height: 160px; object-fit: cover;">
+                    </div>
+
+                    <input type="file"
+                           name="imagen"
+                           class="form-control">
+
+                    <small class="text-muted">Si no eliges una imagen nueva, se conservará la actual.</small>
 
                 </div>
 

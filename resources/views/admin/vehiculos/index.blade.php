@@ -51,11 +51,12 @@
 
                 <td>{{ $vehiculo->id }}</td>
                 <td>
-                    @if($vehiculo->imagen)
-                        <img src="{{ asset('storage/vehiculos/' . $vehiculo->imagen) }}" alt="{{ $vehiculo->marca }} {{ $vehiculo->modelo }}" class="img-thumbnail" style="width: 70px; height: 50px; object-fit: cover;">
-                    @else
-                        <span class="text-muted">Sin imagen</span>
-                    @endif
+                    @php
+                        $imagenAdmin = !empty($vehiculo->imagen) && file_exists(public_path('storage/vehiculos/' . $vehiculo->imagen))
+                            ? asset('storage/vehiculos/' . $vehiculo->imagen)
+                            : asset('img/no-image.svg');
+                    @endphp
+                    <img src="{{ $imagenAdmin }}" alt="{{ $vehiculo->marca }} {{ $vehiculo->modelo }}" class="img-thumbnail" style="width: 70px; height: 50px; object-fit: cover;">
                 </td>
                 <td>{{ $vehiculo->marca }}</td>
                 <td>{{ $vehiculo->modelo }}</td>

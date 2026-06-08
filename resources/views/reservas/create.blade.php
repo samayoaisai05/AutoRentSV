@@ -18,11 +18,12 @@
 
                     <div class="row g-4 align-items-center mb-4">
                         <div class="col-md-4">
-                            @if($vehiculo->imagen)
-                                <img src="{{ asset('storage/vehiculos/' . $vehiculo->imagen) }}" class="img-fluid rounded" alt="{{ $vehiculo->marca }}">
-                            @else
-                                <img src="https://via.placeholder.com/400x250" class="img-fluid rounded" alt="Vehículo">
-                            @endif
+                            @php
+                                $imagenReserva = !empty($vehiculo->imagen) && file_exists(public_path('storage/vehiculos/' . $vehiculo->imagen))
+                                    ? asset('storage/vehiculos/' . $vehiculo->imagen)
+                                    : asset('img/no-image.svg');
+                            @endphp
+                            <img src="{{ $imagenReserva }}" class="img-fluid rounded" alt="{{ $vehiculo->marca }} {{ $vehiculo->modelo }}">
                         </div>
                         <div class="col-md-8">
                             <h3 class="mb-2">{{ $vehiculo->marca }} {{ $vehiculo->modelo }}</h3>

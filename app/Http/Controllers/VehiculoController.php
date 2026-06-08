@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Vehiculo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class VehiculoController extends Controller
 {
@@ -88,7 +89,19 @@ class VehiculoController extends Controller
             'estado' => 'required'
         ]);
 
-        $vehiculo->update($request->all());
+        $datos = $request->all();
+
+        if ($request->hasFile('imagen')) {
+            if ($vehiculo->imagen) {
+                Storage::disk('public')->delete('vehiculos/' . $vehiculo->imagen);
+            }
+
+            $nombre = time() . '_' . $request->imagen->getClientOriginalName();
+            $request->imagen->storeAs('vehiculos', $nombre, 'public');
+            $datos['imagen'] = $nombre;
+        }
+
+        $vehiculo->update($datos);
 
         return redirect()
             ->route('vehiculos.index')
