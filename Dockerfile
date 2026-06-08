@@ -1,6 +1,6 @@
 FROM php:8.2-apache
 
-# Habilitar rewrite módulo de Apache de forma limpia
+# 1. Habilitar rewrite módulo de Apache
 RUN a2enmod rewrite
 
 # Instalar dependencias del sistema
@@ -55,9 +55,10 @@ RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cac
 
 EXPOSE ${PORT}
 
-# EL CAMBIO CRÍTICO: Remueve físicamente cualquier archivo de carga de mpm_event o mpm_worker antes de ejecutar apache2-foreground
+# SOLUCIÓN RADICAL: Eliminamos físicamente TODOS los archivos relacionados con mpm_event y mpm_worker
+# tanto cargas (.load) como configuraciones (.conf) antes de arrancar apache2-foreground
 CMD php artisan config:cache && \
     php artisan route:cache && \
     php artisan view:cache && \
-    rm -f /etc/apache2/mods-enabled/mpm_event.load /etc/apache2/mods-enabled/mpm_worker.load || true && \
+    rm -f /etc/apache2/mods-enabled/mpm_event.* /etc/apache2/mods-enabled/mpm_worker.* || true && \
     apache2-foreground
