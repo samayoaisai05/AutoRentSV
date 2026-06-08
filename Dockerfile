@@ -57,8 +57,10 @@ EXPOSE ${PORT}
 
 # SOLUCIÓN RADICAL: Eliminamos físicamente TODOS los archivos relacionados con mpm_event y mpm_worker
 # tanto cargas (.load) como configuraciones (.conf) antes de arrancar apache2-foreground
+# Comando final: Limpiar, enlazar almacenamiento e iniciar Apache en primer plano
 CMD php artisan config:cache && \
     php artisan route:cache && \
     php artisan view:cache && \
+    php artisan storage:link --force && \
     rm -f /etc/apache2/mods-enabled/mpm_event.* /etc/apache2/mods-enabled/mpm_worker.* || true && \
     apache2-foreground
