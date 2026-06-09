@@ -22,8 +22,15 @@ class HomeController extends Controller
         if ($usuario->is_admin) {
 
             $totalVehiculos = Vehiculo::count();
+            $vehiculosDisponibles = Vehiculo::where('estado', 'Disponible')->count();
+            $vehiculosReservados = Vehiculo::where('estado', 'Reservado')->count();
+            $vehiculosMantenimiento = Vehiculo::where('estado', 'Mantenimiento')->count();
             $totalClientes = User::where('is_admin', 0)->count();
             $totalReservas = Reserva::count();
+            $reservasPendientes = Reserva::where('estado', 'Pendiente')->count();
+            $reservasAprobadas = Reserva::where('estado', 'Aprobada')->count();
+            $reservasFinalizadas = Reserva::where('estado', 'Finalizada')->count();
+            $reservasCanceladas = Reserva::where('estado', 'Cancelada')->count();
 
             $totalIngresos = Reserva::where('estado', 'Aprobada')->sum('total');
 
@@ -61,8 +68,15 @@ class HomeController extends Controller
 
             return view('admin.dashboard', compact(
                 'totalVehiculos',
+                'vehiculosDisponibles',
+                'vehiculosReservados',
+                'vehiculosMantenimiento',
                 'totalClientes',
                 'totalReservas',
+                'reservasPendientes',
+                'reservasAprobadas',
+                'reservasFinalizadas',
+                'reservasCanceladas',
                 'totalIngresos',
                 'meses',
                 'totales',

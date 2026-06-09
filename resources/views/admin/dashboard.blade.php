@@ -65,7 +65,12 @@
             <div class="card card-stat text-center p-4">
                 <div class="icon">🚗</div>
                 <div class="number">{{ $totalVehiculos }}</div>
-                <h6>Vehículos</h6>
+                <h6 class="mb-1">Vehículos</h6>
+                <small class="text-muted d-block">
+                    Disponibles: {{ $vehiculosDisponibles ?? 0 }} ·
+                    Reservados: {{ $vehiculosReservados ?? 0 }} ·
+                    Mantenimiento: {{ $vehiculosMantenimiento ?? 0 }}
+                </small>
             </div>
         </div>
 
@@ -81,7 +86,13 @@
             <div class="card card-stat text-center p-4">
                 <div class="icon">📋</div>
                 <div class="number">{{ $totalReservas }}</div>
-                <h6>Reservas</h6>
+                <h6 class="mb-1">Reservas</h6>
+                <small class="text-muted d-block">
+                    Pendientes: {{ $reservasPendientes ?? 0 }} ·
+                    Aprobadas: {{ $reservasAprobadas ?? 0 }} ·
+                    Finalizadas: {{ $reservasFinalizadas ?? 0 }} ·
+                    Canceladas: {{ $reservasCanceladas ?? 0 }}
+                </small>
             </div>
         </div>
 
