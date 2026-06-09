@@ -86,7 +86,9 @@ class HomeController extends Controller
             ->where('estado', 'Finalizada')
             ->count();
 
-        $totalGastado = Reserva::where('user_id', $usuario->id)->sum('total');
+        $totalGastado = Reserva::where('user_id', $usuario->id)
+            ->whereIn('estado', ['Aprobada', 'Finalizada'])
+            ->sum('total');
 
         $reservasRecientes = Reserva::with('vehiculo')
             ->where('user_id', $usuario->id)
